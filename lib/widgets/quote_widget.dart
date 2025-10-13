@@ -28,7 +28,7 @@ class QuoteWidget extends ConsumerWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Row(
           children: [
@@ -47,18 +47,16 @@ class QuoteWidget extends ConsumerWidget {
           ],
         ),
         SizedBox(height: isDesktop ? 24 : 16),
-        Expanded(
-          child: Center(
-            child: Text(
-              quote.content,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontSize: isDesktop ? 20 : 16,
-                    fontStyle: FontStyle.italic,
-                    height: 1.6,
-                    color: AppTheme.glowWhite,
-                  ),
-              textAlign: TextAlign.center,
-            ),
+        Center(
+          child: Text(
+            quote.content,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  fontSize: isDesktop ? 20 : 16,
+                  fontStyle: FontStyle.italic,
+                  height: 1.6,
+                  color: AppTheme.glowWhite,
+                ),
+            textAlign: TextAlign.center,
           ),
         ),
         SizedBox(height: isDesktop ? 20 : 12),

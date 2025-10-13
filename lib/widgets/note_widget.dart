@@ -18,7 +18,7 @@ class NoteWidget extends ConsumerWidget {
         padding: EdgeInsets.all(isDesktop ? 24 : 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               children: [
@@ -37,31 +37,29 @@ class NoteWidget extends ConsumerWidget {
               ],
             ),
             SizedBox(height: isDesktop ? 24 : 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    note.title,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: AppTheme.glowWhite,
-                          fontWeight: FontWeight.w600,
-                          fontSize: isDesktop ? 22 : 18,
-                        ),
-                  ),
-                  SizedBox(height: isDesktop ? 12 : 8),
-                  Text(
-                    note.preview,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontSize: isDesktop ? 16 : 14,
-                          height: 1.5,
-                        ),
-                    maxLines: isDesktop ? 4 : 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  note.title,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: AppTheme.glowWhite,
+                        fontWeight: FontWeight.w600,
+                        fontSize: isDesktop ? 22 : 18,
+                      ),
+                ),
+                SizedBox(height: isDesktop ? 12 : 8),
+                Text(
+                  note.preview,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: isDesktop ? 16 : 14,
+                        height: 1.5,
+                      ),
+                  maxLines: isDesktop ? 4 : 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
             SizedBox(height: isDesktop ? 16 : 12),
             Text(
