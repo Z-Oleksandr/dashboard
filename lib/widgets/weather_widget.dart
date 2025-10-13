@@ -28,69 +28,87 @@ class WeatherWidget extends ConsumerWidget {
   }
 
   Widget _buildWeatherContent(BuildContext context, weather) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth > 600;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'Weather',
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontSize: isDesktop ? 24 : 20,
+                  ),
             ),
             Icon(
               _getWeatherIcon(weather.condition),
               color: AppTheme.accentCyan,
-              size: 32,
+              size: isDesktop ? 48 : 32,
             ),
           ],
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: isDesktop ? 32 : 20),
         Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               '${weather.temperature.round()}°',
               style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                    fontSize: 56,
+                    fontSize: isDesktop ? 72 : 56,
                     color: AppTheme.glowWhite,
                   ),
             ),
-            const SizedBox(width: 20),
+            SizedBox(width: isDesktop ? 32 : 20),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     weather.condition,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: AppTheme.accentCyan,
+                          fontSize: isDesktop ? 22 : 18,
                         ),
                   ),
+                  const SizedBox(height: 4),
                   Text(
                     weather.description,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontSize: isDesktop ? 16 : 14,
+                        ),
                   ),
                 ],
               ),
             ),
           ],
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: isDesktop ? 24 : 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildWeatherDetail(
-              context,
-              Icons.water_drop,
-              '${weather.humidity}%',
-              'Humidity',
+            Expanded(
+              child: _buildWeatherDetail(
+                context,
+                Icons.water_drop,
+                '${weather.humidity}%',
+                'Humidity',
+                isDesktop,
+              ),
             ),
-            _buildWeatherDetail(
-              context,
-              Icons.air,
-              '${weather.windSpeed.toStringAsFixed(1)} m/s',
-              'Wind',
+            SizedBox(width: isDesktop ? 24 : 16),
+            Expanded(
+              child: _buildWeatherDetail(
+                context,
+                Icons.air,
+                '${weather.windSpeed.toStringAsFixed(1)} m/s',
+                'Wind',
+                isDesktop,
+              ),
             ),
           ],
         ),
@@ -103,22 +121,40 @@ class WeatherWidget extends ConsumerWidget {
     IconData icon,
     String value,
     String label,
+    bool isDesktop,
   ) {
-    return Column(
-      children: [
-        Icon(icon, color: AppTheme.accentBlue, size: 24),
-        const SizedBox(height: 8),
-        Text(
-          value,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: AppTheme.glowWhite,
-              ),
-        ),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-      ],
+    return Container(
+      padding: EdgeInsets.all(isDesktop ? 20 : 12),
+      decoration: BoxDecoration(
+        color: AppTheme.darkPurple.withAlpha(85),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            color: AppTheme.accentBlue,
+            size: isDesktop ? 32 : 24,
+          ),
+          SizedBox(height: isDesktop ? 12 : 8),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: AppTheme.glowWhite,
+                  fontSize: isDesktop ? 20 : 16,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          SizedBox(height: isDesktop ? 4 : 2),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  fontSize: isDesktop ? 14 : 12,
+                ),
+          ),
+        ],
+      ),
     );
   }
 

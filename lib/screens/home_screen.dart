@@ -51,7 +51,7 @@ class HomeScreen extends ConsumerWidget {
     final isWide = orientation == Orientation.landscape || screenWidth > 900;
 
     if (isWide) {
-      // Wide layout: 2 columns
+      // Wide layout: 2 columns with better aspect ratio
       return SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -86,8 +86,9 @@ class HomeScreen extends ConsumerWidget {
   }
 
   double _getAspectRatio(double screenWidth) {
-    if (screenWidth > 1400) return 1.8;
-    if (screenWidth > 1000) return 1.5;
+    if (screenWidth > 1600) return 2.0;
+    if (screenWidth > 1200) return 1.6;
+    if (screenWidth > 900) return 1.4;
     return 1.3;
   }
 }

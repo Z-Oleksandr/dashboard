@@ -10,10 +10,12 @@ class ServerGaugesWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final statsAsync = ref.watch(systemStatsProvider);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth > 600;
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(isDesktop ? 24 : 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -22,20 +24,22 @@ class ServerGaugesWidget extends ConsumerWidget {
                 Icon(
                   Icons.monitor_heart,
                   color: AppTheme.accentCyan,
-                  size: 24,
+                  size: isDesktop ? 32 : 24,
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: isDesktop ? 16 : 12),
                 Text(
                   'Server Resources',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontSize: isDesktop ? 24 : 20,
+                      ),
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: isDesktop ? 32 : 24),
             statsAsync.when(
-              data: (stats) => _buildGauges(context, stats),
-              loading: () => _buildLoadingGauges(context),
-              error: (_, __) => _buildErrorGauges(context),
+              data: (stats) => _buildGauges(context, stats, isDesktop),
+              loading: () => _buildLoadingGauges(context, isDesktop),
+              error: (_, __) => _buildErrorGauges(context, isDesktop),
             ),
           ],
         ),
@@ -43,13 +47,12 @@ class ServerGaugesWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildGauges(BuildContext context, stats) {
+  Widget _buildGauges(BuildContext context, stats, bool isDesktop) {
     final cpuUsage = stats.averageCpuUsage;
     final networkMbps = (stats.totalNetwork / 1024).clamp(0.0, 100.0);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
           child: _buildGauge(
@@ -58,9 +61,10 @@ class ServerGaugesWidget extends ConsumerWidget {
             cpuUsage,
             '${cpuUsage.toStringAsFixed(1)}%',
             Icons.memory,
+            isDesktop,
           ),
         ),
-        const SizedBox(width: 24),
+        SizedBox(width: isDesktop ? 32 : 24),
         Expanded(
           child: _buildGauge(
             context,
@@ -68,35 +72,36 @@ class ServerGaugesWidget extends ConsumerWidget {
             networkMbps,
             '${networkMbps.toStringAsFixed(1)} MB/s',
             Icons.network_check,
+            isDesktop,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildLoadingGauges(BuildContext context) {
+  Widget _buildLoadingGauges(BuildContext context, bool isDesktop) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
-          child: _buildGauge(context, 'CPU', 0, '0%', Icons.memory),
+          child: _buildGauge(context, 'CPU', 0, '0%', Icons.memory, isDesktop),
         ),
-        const SizedBox(width: 24),
+        SizedBox(width: isDesktop ? 32 : 24),
         Expanded(
-          child:
-              _buildGauge(context, 'Network', 0, '0 MB/s', Icons.network_check),
+          child: _buildGauge(
+              context, 'Network', 0, '0 MB/s', Icons.network_check, isDesktop),
         ),
       ],
     );
   }
 
-  Widget _buildErrorGauges(BuildContext context) {
+  Widget _buildErrorGauges(BuildContext context, bool isDesktop) {
     return Center(
       child: Text(
         'Unable to connect to server',
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Colors.redAccent,
+              fontSize: isDesktop ? 16 : 14,
             ),
       ),
     );
@@ -108,12 +113,16 @@ class ServerGaugesWidget extends ConsumerWidget {
     double value,
     String valueText,
     IconData icon,
+    bool isDesktop,
   ) {
+    final gaugeSize = isDesktop ? 180.0 : 140.0;
+    final iconSize = isDesktop ? 36.0 : 28.0;
+
     return Column(
       children: [
         SizedBox(
-          width: 140,
-          height: 140,
+          width: gaugeSize,
+          height: gaugeSize,
           child: CustomPaint(
             painter: GaugePainter(
               value: value.clamp(0.0, 100.0),
@@ -125,7 +134,7 @@ class ServerGaugesWidget extends ConsumerWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(icon, color: AppTheme.accentCyan, size: 28),
+                  Icon(icon, color: AppTheme.accentCyan, size: iconSize),
                   const SizedBox(height: 8),
                   Text(
                     valueText,
@@ -215,7 +224,7 @@ class GaugePainter extends CustomPainter {
     // Glow effect for high values
     if (value > 0) {
       final glowPaint = Paint()
-        ..color = primaryColor.withOpacity(0.3)
+        ..color = primaryColor.withAlpha(85)
         ..style = PaintingStyle.stroke
         ..strokeWidth = strokeWidth + 4
         ..strokeCap = StrokeCap.round

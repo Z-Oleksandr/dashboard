@@ -35,5 +35,6 @@ class AppConfig {
     'Mobile Base',
     'System 4',
     'System 5',
+    'System 6'
   ];
 }

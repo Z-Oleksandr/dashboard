@@ -10,10 +10,12 @@ class LedIndicatorsWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectionAsync = ref.watch(systemConnectionProvider);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth > 600;
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(isDesktop ? 24 : 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -22,20 +24,23 @@ class LedIndicatorsWidget extends ConsumerWidget {
                 Icon(
                   Icons.power_settings_new,
                   color: AppTheme.accentCyan,
-                  size: 24,
+                  size: isDesktop ? 32 : 24,
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: isDesktop ? 16 : 12),
                 Text(
                   'System Status',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontSize: isDesktop ? 24 : 20,
+                      ),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: isDesktop ? 24 : 20),
             connectionAsync.when(
-              data: (isConnected) => _buildIndicators(context, isConnected),
-              loading: () => _buildIndicators(context, false),
-              error: (_, __) => _buildIndicators(context, false),
+              data: (isConnected) =>
+                  _buildIndicators(context, isConnected, isDesktop),
+              loading: () => _buildIndicators(context, false, isDesktop),
+              error: (_, __) => _buildIndicators(context, false, isDesktop),
             ),
           ],
         ),
@@ -43,26 +48,41 @@ class LedIndicatorsWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildIndicators(BuildContext context, bool isMainServerOnline) {
-    return Wrap(
-      spacing: 16,
-      runSpacing: 16,
-      children: List.generate(
-        AppConfig.systemIndicators.length,
-        (index) => _buildLedIndicator(
-          context,
-          AppConfig.systemIndicators[index],
-          index == 0
-              ? isMainServerOnline
-              : false, // Only main server shows real status
+  Widget _buildIndicators(
+      BuildContext context, bool isMainServerOnline, bool isDesktop) {
+    final crossAxisCount = isDesktop ? 2 : 3;
+
+    return Center(
+      child: Wrap(
+        spacing: isDesktop ? 20 : 12,
+        runSpacing: isDesktop ? 20 : 12,
+        alignment: WrapAlignment.center,
+        children: List.generate(
+          AppConfig.systemIndicators.length,
+          (index) => SizedBox(
+            width: isDesktop
+                ? (MediaQuery.of(context).size.width > 1200 ? 200 : 180)
+                : (MediaQuery.of(context).size.width - 80) / 3,
+            child: _buildLedIndicator(
+              context,
+              AppConfig.systemIndicators[index],
+              index == 0 ? isMainServerOnline : false,
+              isDesktop,
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildLedIndicator(BuildContext context, String label, bool isOnline) {
+  Widget _buildLedIndicator(
+      BuildContext context, String label, bool isOnline, bool isDesktop) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: isDesktop ? 20 : 12,
+        vertical: isDesktop ? 16 : 12,
+      ),
       decoration: BoxDecoration(
         color: AppTheme.darkPurple.withOpacity(0.5),
         borderRadius: BorderRadius.circular(12),
@@ -75,10 +95,11 @@ class LedIndicatorsWidget extends ConsumerWidget {
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 12,
-            height: 12,
+            width: isDesktop ? 16 : 12,
+            height: isDesktop ? 16 : 12,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: isOnline ? AppTheme.accentCyan : Colors.grey,
@@ -86,19 +107,24 @@ class LedIndicatorsWidget extends ConsumerWidget {
                   ? [
                       BoxShadow(
                         color: AppTheme.accentCyan.withOpacity(0.6),
-                        blurRadius: 8,
-                        spreadRadius: 2,
+                        blurRadius: isDesktop ? 12 : 8,
+                        spreadRadius: isDesktop ? 3 : 2,
                       ),
                     ]
                   : null,
             ),
           ),
-          const SizedBox(width: 12),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: isOnline ? AppTheme.glowWhite : AppTheme.textSecondary,
-                ),
+          SizedBox(width: isDesktop ? 12 : 8),
+          Flexible(
+            child: Text(
+              label,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color:
+                        isOnline ? AppTheme.glowWhite : AppTheme.textSecondary,
+                    fontSize: isDesktop ? 15 : 13,
+                  ),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),

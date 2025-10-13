@@ -34,7 +34,7 @@ final systemInfoProvider = StreamProvider<SystemInfo>((ref) {
 
 final systemConnectionProvider = StreamProvider<bool>((ref) {
   final service = ref.watch(systemMonitorServiceProvider);
-  return service.connectionStream;
+  return Stream.value(service.isConnected);
 });
 
 // Weather Provider

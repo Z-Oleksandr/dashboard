@@ -23,34 +23,45 @@ class QuoteWidget extends ConsumerWidget {
   }
 
   Widget _buildQuoteContent(BuildContext context, quote) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth > 600;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
           children: [
             Icon(
               Icons.format_quote,
               color: AppTheme.accentCyan,
-              size: 28,
+              size: isDesktop ? 36 : 28,
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: isDesktop ? 16 : 12),
             Text(
               'Daily Quote',
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontSize: isDesktop ? 24 : 20,
+                  ),
             ),
           ],
         ),
-        const SizedBox(height: 16),
-        Text(
-          quote.content,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontSize: 16,
-                fontStyle: FontStyle.italic,
-                height: 1.5,
-                color: AppTheme.glowWhite,
-              ),
+        SizedBox(height: isDesktop ? 24 : 16),
+        Expanded(
+          child: Center(
+            child: Text(
+              quote.content,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontSize: isDesktop ? 20 : 16,
+                    fontStyle: FontStyle.italic,
+                    height: 1.6,
+                    color: AppTheme.glowWhite,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+          ),
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: isDesktop ? 20 : 12),
         Align(
             alignment: Alignment.centerRight,
             child: Column(
@@ -61,16 +72,16 @@ class QuoteWidget extends ConsumerWidget {
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppTheme.accentBlue,
                         fontWeight: FontWeight.w500,
+                        fontSize: isDesktop ? 18 : 16,
                       ),
                 ),
-                const SizedBox(height: 4),
                 Text(
                   quote.category,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: AppTheme.accentCyan.withOpacity(0.8),
                         fontStyle: FontStyle.italic,
                       ),
-                ),
+                )
               ],
             )),
       ],
