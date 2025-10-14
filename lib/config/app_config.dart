@@ -1,10 +1,9 @@
 class AppConfig {
   // System Monitor WebSocket
   static const String systemMonitorHost =
-      '192.168.0.116'; // Change to your server IP
+      'monitor.sbmedia.cloud'; // Change to your server IP
   static const int systemMonitorPort = 8999;
-  static const String systemMonitorWsUrl =
-      'ws://$systemMonitorHost:$systemMonitorPort';
+  static const String systemMonitorWsUrl = 'wss://$systemMonitorHost';
 
   // Weather API (OpenWeatherMap - get free API key from openweathermap.org)
   static const String weatherApiKey = '51fc421d696e1d573f9afca11f5a6618';

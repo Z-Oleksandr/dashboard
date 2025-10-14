@@ -35606,7 +35606,7 @@ case 2:return A.O(o.at(-1),r)}})
 return A.Q($async$jp,r)}}
 A.nf.prototype={
 Km(){var s,r,q,p=this
-try{p.a=A.asp(A.afs(A.eq("ws://192.168.0.116:8999",0,null),null))
+try{p.a=A.asp(A.afs(A.eq("wss://monitor.sbmedia.cloud",0,null),null))
 p.f=!0
 p.e.t(0,!0)
 r=p.a.r.b
