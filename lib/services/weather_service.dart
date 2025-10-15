@@ -25,4 +25,25 @@ class WeatherService {
       return null;
     }
   }
+
+  Future<WeatherForecast?> getWeatherForecast() async {
+    try {
+      final url = Uri.parse(
+        '${AppConfig.weatherApiUrl}/forecast?lat=${AppConfig.defaultLat}&lon=${AppConfig.defaultLon}&units=metric&appid=${AppConfig.weatherApiKey}',
+      );
+
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        return WeatherForecast.fromJson(data);
+      } else {
+        log.e('Weather Forecast API error: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      log.e('Error fetching weather forecast: $e');
+      return null;
+    }
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/dashboard_providers.dart';
+import '../screens/weather_screen.dart';
 import '../theme/app_theme.dart';
 
 class WeatherWidget extends ConsumerWidget {
@@ -10,18 +11,27 @@ class WeatherWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final weatherAsync = ref.watch(weatherProvider);
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: weatherAsync.when(
-          data: (weather) {
-            if (weather == null) {
-              return _buildError('Unable to load weather');
-            }
-            return _buildWeatherContent(context, weather);
-          },
-          loading: () => _buildLoading(),
-          error: (err, stack) => _buildError('Error loading weather'),
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const WeatherScreen(),
+          ),
+        );
+      },
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: weatherAsync.when(
+            data: (weather) {
+              if (weather == null) {
+                return _buildError('Unable to load weather');
+              }
+              return _buildWeatherContent(context, weather);
+            },
+            loading: () => _buildLoading(),
+            error: (err, stack) => _buildError('Error loading weather'),
+          ),
         ),
       ),
     );

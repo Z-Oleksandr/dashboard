@@ -43,6 +43,12 @@ final weatherProvider = FutureProvider<WeatherData?>((ref) async {
   return service.getCurrentWeather();
 });
 
+// Weather Forecast Provider
+final weatherForecastProvider = FutureProvider<WeatherForecast?>((ref) async {
+  final service = ref.watch(weatherServiceProvider);
+  return service.getWeatherForecast();
+});
+
 // Quote Provider
 final quoteProvider = FutureProvider<DailyQuoteNinjas>((ref) async {
   final service = ref.watch(quoteServiceProvider);

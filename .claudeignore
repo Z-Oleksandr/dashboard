@@ -1,0 +1,123 @@
+# Flutter/Dart build outputs
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Platform-specific build outputs
+android/build/
+android/.gradle/
+android/app/build/
+android/captures/
+android/local.properties
+android/gradlew
+android/gradlew.bat
+android/gradle/
+
+ios/build/
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Runner.xcworkspace/
+ios/Runner.xcodeproj/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserstate
+
+windows/flutter/
+windows/runner/Debug/
+windows/runner/Release/
+
+linux/flutter/
+
+web/icons/
+
+# macOS
+macos/Flutter/
+macos/Pods/
+macos/Runner.xcworkspace/
+
+# Generated files
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+**/*.g.dart
+**/*.freezed.dart
+
+# Coverage and test reports
+coverage/
+test/coverage/
+*.lcov
+
+# Documentation builds (if using dartdoc)
+doc/api/
+
+# Log files
+*.log
+
+# Large asset files that don't need context
+assets/videos/
+assets/large_images/
+*.mp4
+*.mov
+*.avi
+
+# Lock files (keep pubspec.lock for apps, but ignore if library)
+# pubspec.lock
+
+# Environment files with secrets
+.env
+.env.local
+.env.*.local
+*.key
+secrets/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# OS-specific
+Thumbs.db
+ehthumbs.db
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Large dependencies or vendored code
+vendor/
+
+# Firebase auto-generated files (if using Firebase)
+ios/firebase_app_id_file.json
+android/app/google-services.json
+
+# Screenshots and recordings for testing
+screenshots/
+recordings/
+
+# Performance profiling data
+*.trace
+
+# Analysis files
+.analysis_options_cache/
